@@ -1,0 +1,44 @@
+{
+  "generator": "Hunyuan3D-2 (Tencent, Slurm GPU cluster — Tesla V100 octree 512 + NVIDIA L4 octree 384)",
+  "updated": "2026-11-13",
+  "models": {
+    "player_ostrich": {
+      "promoted": "batch1_s7",
+      "octree": 384,
+      "yaw_rad": 0.0,
+      "score": 8.0,
+      "notes": "Clean side profile, striped lance intact, distinct ostrich neck and legs."
+    },
+    "enemy_bounder": {
+      "candidates": { "batch1_s7": 4.0, "v2_s7": 9.0, "v2_s21": 8.5 },
+      "promoted": "v2_s7",
+      "octree": 512,
+      "yaw_rad": 0.0,
+      "score": 9.0,
+      "notes": "Full-length horizontal red/white striped lance, separated S-curved vulture neck, sharp talons."
+    },
+    "enemy_hunter": {
+      "candidates": { "batch1_s7": 3.0, "v2_s7": 9.5, "v2_s21": 8.5 },
+      "promoted": "v2_s7",
+      "octree": 512,
+      "yaw_rad": 0.0,
+      "score": 9.5,
+      "notes": "Long straight horizontal lance, gold helmet crest, clean separation between breastplate and bird head."
+    },
+    "enemy_shadowlord": {
+      "candidates": { "batch1_s7": 4.5, "v2_s7": 9.0, "v2_s21": 8.0 },
+      "promoted": "v2_s7",
+      "octree": 512,
+      "yaw_rad": 0.0,
+      "score": 9.0,
+      "notes": "Upright dark-armour knight with bright contrasting horizontal lance and separated violet vulture neck."
+    },
+    "buzzard_riderless": { "promoted": "batch1_s7", "octree": 384, "yaw_rad": 1.5707963, "score": 7.0 },
+    "pterodactyl": { "promoted": "batch1_s7", "octree": 384, "yaw_rad": 1.5707963, "score": 7.0 },
+    "egg": { "promoted": "batch1_s7", "octree": 384, "yaw_rad": 0.0, "score": 9.0 },
+    "spawn_pad": { "promoted": "batch1_s7", "octree": 384, "yaw_rad": 0.0, "score": 9.0 },
+    "platform_base": { "promoted": "batch1_s7", "octree": 384, "score": 6.5 },
+    "platform_long": { "promoted": "batch1_s7", "octree": 384, "score": 8.0 },
+    "platform_short": { "promoted": "batch1_s7", "octree": 384, "score": 8.0 }
+  }
+}

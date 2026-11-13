@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skyjoust — 2.5D Aerial Jousting Arena in Godot 4.7 Forward+</title>
+  <meta name="description" content="An open-source 2.5D single-screen aerial jousting game in Godot 4.7 Forward+ with interactive 3D models, hinged feathered wings, deterministic 60 Hz physics, and FFmpeg-synthesized audio.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://charles-forsyth.github.io/skyjoust/">
+  <meta property="og:title" content="Skyjoust — 2.5D Aerial Jousting Arena in Godot 4.7 Forward+">
+  <meta property="og:description" content="Rotate all 10 3D models live in WebGL, audition the FFmpeg-synthesized SFX soundboard, and explore 4 dynamic volcanic sky-island arenas.">
+  <meta property="og:image" content="https://charles-forsyth.github.io/skyjoust/assets/og-share.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Skyjoust — 2.5D Aerial Jousting Arena in Godot 4.7 Forward+">
+  <meta name="twitter:description" content="Rotate all 10 3D models live in WebGL, audition the FFmpeg-synthesized SFX soundboard, and explore 4 dynamic volcanic sky-island arenas.">
+  <meta name="twitter:image" content="https://charles-forsyth.github.io/skyjoust/assets/og-share.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site.css">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top">
+        <img class="brand-icon" src="assets/apple-touch-icon.png" alt="Skyjoust emblem">
+        <span>SKYJOUST</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#hangar">3D Hangar</a>
+        <a href="#arenas">Sky Arenas</a>
+        <a href="#soundboard">SFX Synth</a>
+        <a href="#modes">Modes &amp; Physics</a>
+        <a href="#quickstart">Quick Start</a>
+        <a class="btn btn-sm" href="https://github.com/charles-forsyth/skyjoust">GitHub Repo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="kicker">Godot 4.7 Forward+ · Deterministic 2.5D Arcade</span>
+          <h1>High Lances Over Molten Skies</h1>
+          <p class="lead">
+            Skyjoust reimagines single-screen mounted aerial combat with hand-painted 3D miniatures,
+            hinged two-segment feathered wings, an air-dash tie-breaker, volcanic hazards, and three distinct
+            modes — from intense wave survival to hazard-free Peaceful Flight.
+          </p>
+          <p class="disclaimer">
+            Independent open-source tribute inspired by Williams Electronics' 1982 arcade classic <em>Joust</em>.
+            Not affiliated with or endorsed by Williams Electronics or Warner Bros. Entertainment.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#hangar">Inspect 3D Models Live</a>
+            <a class="btn" href="https://github.com/charles-forsyth/skyjoust">Source &amp; SPEC.md</a>
+          </div>
+          <div class="spec-strip">
+            <span>60 Hz Wrap-Safe 2D Math</span>
+            <span>10 Interactive GLBs</span>
+            <span>Zero Runtime AI</span>
+            <span>30/30 Headless Checks</span>
+          </div>
+        </div>
+
+        <div class="video-stage">
+          <video id="hero-video" autoplay muted loop playsinline poster="assets/shot_combat.jpg">
+            <source src="assets/gameplay.mp4" type="video/mp4">
+          </video>
+          <div class="stage-bar">
+            <span>Godot 4.7 Forward+ · Captured at 60 FPS</span>
+            <button type="button" id="btn-video" class="btn btn-sm">Pause Clip</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="hangar">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <h2>Interactive 3D Miniature Hangar</h2>
+            <p class="sec-sub">
+              Drag to orbit, scroll or pinch to zoom, and inspect every knight, mount, hazard, and carved ledge
+              shipped in the game. Web previews use matte Principled BSDF materials matching Godot's <code>ModelFit.matte()</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="hangar-grid">
+          <div class="viewer-card" id="viewer-card">
+            <div class="viewer-toolbar">
+              <span class="viewer-badge" id="viewer-badge">models/player_ostrich.glb</span>
+              <div class="viewer-controls">
+                <button type="button" id="btn-rot" class="btn btn-sm">Auto-Rotate: On</button>
+                <button type="button" id="btn-env" class="btn btn-sm">Backdrop: Sunset</button>
+                <button type="button" id="btn-reset" class="btn btn-sm">Reset Orbit</button>
+              </div>
+            </div>
+
+            <model-viewer
+              id="mv"
+              src="models/player_ostrich.glb"
+              loading="eager"
+              alt="Interactive 3D model from Skyjoust"
+              camera-controls
+              auto-rotate
+              auto-rotate-delay="0"
+              rotation-per-second="22deg"
+              camera-orbit="32deg 74deg auto"
+              shadow-intensity="0.85"
+              exposure="1.05"
+              tone-mapping="agx"
+              interaction-prompt="none">
+            </model-viewer>
+
+            <div class="viewer-foot">
+              <span>Left-drag: rotate · Scroll / pinch: zoom · Right-drag: pan</span>
+              <span id="insp-dim">Loading mesh...</span>
+            </div>
+          </div>
+
+          <div class="roster-panel">
+            <div class="model-tabs" id="model-tabs" role="tablist" aria-label="3D Asset Selector"></div>
+
+            <div class="inspector-box">
+              <h3 class="inspector-title" id="insp-title">Player — Ostrich Knight</h3>
+              <p class="inspector-desc" id="insp-desc"></p>
+              <div class="kv-grid">
+                <div class="kv">
+                  <span class="kv-label">Arena Role</span>
+                  <span class="kv-val" id="insp-role">—</span>
+                </div>
+                <div class="kv">
+                  <span class="kv-label">Geometry</span>
+                  <span class="kv-val" id="insp-oct">—</span>
+                </div>
+                <div class="kv">
+                  <span class="kv-label">Turntable QA</span>
+                  <span class="kv-val" id="insp-score">—</span>
+                </div>
+                <div class="kv">
+                  <span class="kv-label">Forward Yaw</span>
+                  <span class="kv-val">+X Aligned</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="craft-callout">
+          <img src="assets/craft_v1_vs_v2.jpg" alt="Comparison between Batch 1 octree-384 riders and V2 side-profile octree-512 riders" loading="lazy">
+          <div>
+            <h3>Solving Foreshortened Lances: Batch 1 vs. Octree-512 V2</h3>
+            <p>
+              In a side-view jousting game, lance silhouette is gameplay truth. Our first image-to-3D pass (left column,
+              front-angled 3/4 concepts at octree 384) foreshortened forward-pointing lances into stubby nubs and fused
+              knight torsos into bird necks (scoring 3.0–4.5/10).
+            </p>
+            <p>
+              Re-generating from strict right-facing side-profile concepts with clear negative space above the mount's head
+              at <strong>octree 512 / 80,000 faces</strong> across multi-seed candidates (center &amp; right columns) raised
+              Bounder, Hunter, and Shadowlord silhouettes to <strong>9.0–9.5/10</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="arenas">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <h2>Four Dynamic Sky-Island Arenas</h2>
+            <p class="sec-sub">
+              Every 4 waves (or every 10 golden eggs in Peaceful Flight), Skyjoust transitions backdrops, directional sun
+              key, ambient energy, and custom FBM lava horizon-fog uniforms.
+            </p>
+          </div>
+        </div>
+
+        <div class="arena-tabs" id="arena-tabs"></div>
+
+        <div class="arena-stage">
+          <img id="arena-img" src="assets/shot_combat.jpg" alt="Sunset Isles gameplay screenshot">
+          <div>
+            <span class="kicker" id="arena-waves">Waves 1 - 4</span>
+            <h3 id="arena-title">Sunset Isles</h3>
+            <p class="sec-sub" id="arena-desc"></p>
+            <div class="swatch-row">
+              <span class="swatch"><span class="swatch-dot" id="dot-sun"></span><span id="hex-sun">Sun</span></span>
+              <span class="swatch"><span class="swatch-dot" id="dot-amb"></span><span id="hex-amb">Ambient</span></span>
+              <span class="swatch"><span class="swatch-dot" id="dot-haze"></span><span id="hex-haze">Haze</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="soundboard">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <h2>Zero-Sample FFmpeg Synthesized SFX Board</h2>
+            <p class="sec-sub">
+              Every whoosh, metallic lance clash, egg chime, and volcanic sizzle is generated deterministically from
+              <code>ffmpeg -f lavfi</code> filtergraphs in <code>tools/make_sfx.sh</code>. Click any pad to audition.
+            </p>
+          </div>
+        </div>
+
+        <div class="sfx-layout">
+          <div class="pad-grid" id="pad-grid"></div>
+          <div class="code-card">
+            <h3>Active Filtergraph Recipe</h3>
+            <pre id="sfx-recipe"># Click any pad on the left to hear the synthesized MP3
+# and inspect its exact FFmpeg lavfi expression.
+
+# Seamless 20s volcanic rumble (zero loop dropout):
+anoisesrc=d=22:c=brown:a=0.5 -> lowpass=130 -> acrossfade=d=2</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="modes">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <h2>Modes, Lance Mathematics &amp; Controls</h2>
+            <p class="sec-sub">
+              All movement and collisions run in a deterministic 60 Hz 2D coordinate plane (<code>x in [-15, 15)</code>)
+              with separate gameplay and visual RNG streams so headless endurance tests match live play frame-for-frame.
+            </p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <h3>Three Playable Modes</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Mode</th>
+                  <th>Start</th>
+                  <th>Rules</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Classic Arcade</strong></td>
+                  <td><kbd>SPACE</kbd></td>
+                  <td>5 lives, extra life every 20,000 pts, escalating waves, Egg Waves every 5th, Troll Hand (W3+), Crumbling Ledges (W6+).</td>
+                </tr>
+                <tr>
+                  <td><strong>Daily Challenge</strong></td>
+                  <td><kbd>C</kbd></td>
+                  <td>Deterministic <code>YYYYMMDD</code> seed so every run that day faces the exact same wave spawns and drops; isolated daily best score.</td>
+                </tr>
+                <tr>
+                  <td><strong>Peaceful Flight</strong></td>
+                  <td><kbd>F</kbd></td>
+                  <td>Zero enemies or hazards; molten lava gently updrafts you skyward with golden sparks while you gather eggs across all 4 arenas.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="code-card mt-1">
+              <h3>Joust Resolution Equation (rider.gd / main.gd)</h3>
+              <pre>diff = player.lance_y() - enemy.lance_y()
+     + (0.50 if long_lance &gt; 0.0 else 0.0)
+     + (0.20 if player.dashing() else 0.0)
+
+# diff &gt; +0.22  -&gt; Enemy unmounted (+500..1500, egg drops)
+# |diff| &lt;= 0.22 -&gt; Metallic lance clash &amp; wrap-safe rebound
+# diff &lt; -0.22  -&gt; Shield breaks (if active) or life lost</pre>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Keyboard &amp; Gamepad Controls</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Keyboard</th>
+                  <th>Gamepad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Run &amp; Air Steer</td>
+                  <td><kbd>A</kbd> / <kbd>D</kbd> or Arrows</td>
+                  <td>Left Stick / D-Pad</td>
+                </tr>
+                <tr>
+                  <td>Wing Flap</td>
+                  <td><kbd>SPACE</kbd> / <kbd>W</kbd> / <kbd>Up</kbd></td>
+                  <td>South (<kbd>A</kbd> / Cross)</td>
+                </tr>
+                <tr>
+                  <td>Air-Dash Lunge</td>
+                  <td><kbd>SHIFT</kbd> / <kbd>J</kbd></td>
+                  <td>West (<kbd>X</kbd>) / <kbd>RB</kbd></td>
+                </tr>
+                <tr>
+                  <td>Pause / Quit to Title</td>
+                  <td><kbd>ESC</kbd> or <kbd>P</kbd> (then <kbd>Q</kbd>)</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td>Help &amp; Rules Card</td>
+                  <td><kbd>H</kbd> or <kbd>F1</kbd></td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td>Music (off default) / Mute</td>
+                  <td><kbd>M</kbd> / <kbd>N</kbd></td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quickstart">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <h2>Run Locally &amp; Execute the 30-Check Test Suite</h2>
+            <p class="sec-sub">
+              Requires <a href="https://godotengine.org/">Godot Engine 4.7+</a> (Forward+). Everything needed to play —
+              textured GLBs, hinged wings, shaders, backdrops, and synthesized audio — is committed in <code>game/</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="code-card">
+            <h3>Play Interactive or Build macOS .app</h3>
+            <pre>git clone https://github.com/charles-forsyth/skyjoust.git
+cd skyjoust
+
+# Launch directly in Godot 4.7+
+godot --path game
+
+# Optional: build ~/Games/Skyjoust/Skyjoust.app on macOS
+./tools/build_mac_app.sh
+open ~/Games/Skyjoust/Skyjoust.app</pre>
+          </div>
+
+          <div class="code-card">
+            <h3>Headless Regression &amp; 20-Minute Endurance Sim</h3>
+            <pre># 28-check regression suite (0 warnings, 0 resource leaks)
+godot --headless --path game -s res://tests/test_all.gd
+
+# Hazard unit suites
+godot --headless --path game -s res://tests/tests_hand.gd
+godot --headless --path game -s res://tests/tests_crumble.gd
+
+# Simulate 20 minutes of 60 Hz autopilot play in ~4 seconds
+godot --headless --path game -- --sim=1200</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>Skyjoust · MIT License · Built by Chuck Forsyth with Godot 4.7, Blender 5.2, Hunyuan3D-2, Lumina &amp; FFmpeg.</span>
+      <span>
+        <a href="https://github.com/charles-forsyth/skyjoust">Repository</a> ·
+        <a href="https://github.com/charles-forsyth/skyjoust/blob/main/SPEC.md">SPEC.md</a> ·
+        <a href="https://github.com/charles-forsyth/skyjoust/blob/main/ART_BIBLE.md">ART_BIBLE.md</a>
+      </span>
+    </div>
+  </footer>
+
+  <script src="site.js"></script>
+</body>
+</html>

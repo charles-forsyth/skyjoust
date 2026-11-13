@@ -1,0 +1,26 @@
+name: Bug Report
+description: Report a gameplay, rendering, audio, or showcase bug
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the bug and how it differs from expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Launch `godot --path game`
+        2. Start Classic / Daily / Peaceful mode
+        3. Observe ...
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: OS & Godot Version
+      placeholder: macOS 15 / Linux, Godot 4.7.2 Forward+

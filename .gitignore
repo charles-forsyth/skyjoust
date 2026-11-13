@@ -1,0 +1,9 @@
+game/.godot/
+game/frames/
+__pycache__/
+*.pyc
+cluster/out/
+cluster/out_v2/
+rejected/
+.music_history.json
+concepts/batch2/*.png

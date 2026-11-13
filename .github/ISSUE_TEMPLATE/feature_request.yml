@@ -1,0 +1,11 @@
+name: Feature Idea
+description: Suggest an arena hazard, mode, or polish enhancement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Proposal
+      description: Describe the gameplay or visual improvement and how it fits Skyjoust's deterministic 2.5D design.
+    validations:
+      required: true
